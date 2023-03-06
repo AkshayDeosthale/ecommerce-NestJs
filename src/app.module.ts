@@ -1,11 +1,13 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { ProductModule } from './product/product.module';
-import { CartModule } from './cart/cart.module';
-import { UserModule } from './user/user.module';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { CartModule } from './cart/cart.module';
+import { LoggerMiddleware } from './middlewares/logger.middleware';
+import { ProductModule } from './product/product.module';
+import { UserModule } from './user/user.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -19,8 +21,13 @@ import * as Joi from 'joi';
         FRONTEND_URL: Joi.string(),
       }),
     }),
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('product');
+  }
+}

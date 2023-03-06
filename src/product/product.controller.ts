@@ -6,10 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { Request } from 'express';
 
 @Controller('product')
 export class ProductController {
@@ -23,6 +25,15 @@ export class ProductController {
   @Get()
   findAll() {
     return this.productService.findAll();
+  }
+
+  @Get(':category/:subcategory')
+  findProductWithParams(
+    @Req() request: Request,
+    @Param('category') category: string,
+    @Param('subcategory') subcategory: string,
+  ) {
+    return this.productService.findWithParam(category, subcategory);
   }
 
   @Get(':id')

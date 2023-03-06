@@ -26,6 +26,13 @@ export class ProductService {
     return this.productModel.find().exec();
   }
 
+  findWithParam(category: string, subcategory: string): any {
+    return this.productModel.find({
+      category: category,
+      subcategory: subcategory,
+    });
+  }
+
   findOne(id: string): any {
     return this.productModel.findById(id).exec();
   }
