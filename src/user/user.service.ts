@@ -19,7 +19,8 @@ export class UserService {
   ) {}
 
   create(createUserDto: CreateUserDto) {
-    const newUser = new this.userModel(createUserDto);
+    const tempUser = { ...createUserDto, cash: 0 };
+    const newUser = new this.userModel(tempUser);
     return newUser.save();
   }
 
